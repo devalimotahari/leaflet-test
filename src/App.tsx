@@ -2,10 +2,33 @@ import {
   LayerGroup,
   LayersControl,
   MapContainer,
+  Marker,
+  Popup,
   TileLayer,
+  useMapEvents,
 } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
+import { useState } from "react";
+
+function ClickListener() {
+  const [cordinate, setCordinate] = useState<[number, number]>([32.822637444696596,51.70188309871206]);
+  const map = useMapEvents({
+    click: (e) => {
+      console.log(e);
+      setCordinate([e.latlng.lat, e.latlng.lng]);
+      map.locate();
+    },
+    locationfound: (location) => {
+      console.log("location found:", location);
+    },
+  });
+  return (
+    <Marker position={cordinate}>
+      <Popup>اینجا رو انتخاب کردی</Popup>
+    </Marker>
+  );
+}
 
 function App() {
   return (
@@ -15,9 +38,10 @@ function App() {
           height: "100vh",
           width: "100%",
         }}
-        center={[33.52355922735366, 36.317284883627735]}
+        center={[32.82261807573093, 51.70188309871206]}
         zoom={14}
       >
+        <ClickListener />
         <LayersControl>
           <LayersControl.BaseLayer name="Open Street Map">
             <TileLayer
