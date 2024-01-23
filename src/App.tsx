@@ -1,38 +1,52 @@
 import {
   LayerGroup,
   LayersControl,
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-  useMapEvents,
+  MapContainer, TileLayer,
+  useMapEvents
 } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
-import { useState } from "react";
 
 function ClickListener() {
-  const [cordinate, setCordinate] = useState<[number, number]>([32.822637444696596,51.70188309871206]);
   const map = useMapEvents({
     click: (e) => {
       console.log(e);
-      setCordinate([e.latlng.lat, e.latlng.lng]);
-      map.locate();
     },
-    locationfound: (location) => {
-      console.log("location found:", location);
+    moveend: () => {
+      console.log("get center", map.getCenter());
     },
   });
-  return (
-    <Marker position={cordinate}>
-      <Popup>اینجا رو انتخاب کردی</Popup>
-    </Marker>
-  );
+  return null;
 }
+
+const TestLayer = () => {
+  return (
+    <p
+      style={{
+        margin: 0,
+        color: "red",
+        position: "absolute",
+        left: "50%",
+        top: "50%",
+        transform: "translate(-50%,-50%)",
+        zIndex: 1000,
+      }}
+    >
+      this is custom marker
+    </p>
+  );
+};
 
 function App() {
   return (
-    <div style={{ height: "100vh", width: "100vw", display: "flex" }}>
+    <div
+      style={{
+        height: "100vh",
+        width: "100vw",
+        display: "flex",
+        position: "relative",
+      }}
+    >
       <MapContainer
         style={{
           height: "100vh",
@@ -42,6 +56,7 @@ function App() {
         zoom={14}
       >
         <ClickListener />
+        <TestLayer />
         <LayersControl>
           <LayersControl.BaseLayer name="Open Street Map">
             <TileLayer
