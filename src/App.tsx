@@ -25,6 +25,7 @@ function ClickListener() {
   });
   return (
     <Marker position={cordinate}>
+      fixed
       <Popup>اینجا رو انتخاب کردی</Popup>
     </Marker>
   );
